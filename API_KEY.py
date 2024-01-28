@@ -26,7 +26,7 @@ def calculate_RSI(ticker):
     ema_up = up.ewm(com=14-1, adjust=False).mean()
     ema_down = down.ewm(com=14-1, adjust=False).mean()
     rs = ema_up / ema_down
-    return str(100_ - (100/ (1+rs)).iloc[-1])
+    return str(100 - (100/ (1+rs)).iloc[-1])
 
 def calculate_MACD(ticker):
     data = yf.Ticker(ticker).history(period='1y').Close
