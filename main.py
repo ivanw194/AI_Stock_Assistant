@@ -4,8 +4,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import streamlit as st
 import yfinance as yf
+import os  
 
-openai.api_key = open('API_KEY.txt', 'r').read()
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 def get_stock_price(ticker):
     return str(yf.Ticker(ticker).history(period='1y').iloc[-1].Close)
@@ -159,7 +160,7 @@ availible_functions = {
 if 'messages' not in st.session_state:
     st.session_state['messages'] = []
 
-st.title('Stock Analysis Chatbot Assistant')
+st.title('Stock Evaluation AI Chatbot')
 
 user_input = st.text_input('Your Input:')
 
@@ -210,5 +211,5 @@ if user_input:
     except Exception as e:
         st.text('Error occured, ', str(e))
 
-
+#python -m streamlit run main.py
 
