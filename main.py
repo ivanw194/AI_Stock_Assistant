@@ -1,4 +1,4 @@
-import json
+import yaml
 import openai
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -53,7 +53,6 @@ def plot_stock_price(ticker):
 
 
 functions = [
-
     {
         'name': 'get_stock_price',
         'description': 'Gets the latest stock price given the tinker symbol of a company.',
@@ -167,7 +166,11 @@ user_input = st.text_input('Your Input:')
 if user_input:
     try:
         st.session_state['messages'].append({'role': 'user', 'content':f'{user_input}'})
-
+        # response = openai.Completion.create(
+        # engine="text-davinci-002",
+        # prompt=input(""),
+        # max_tokens=100
+        # )
         response = openai.ChatCompletion.create(
             model='gpt-3.5-turbo-0613',
             messages=st.session_state['messages'],
@@ -179,7 +182,7 @@ if user_input:
 
         if response_message.get('function_call'):
             function_name = response_message['function_call']['name']
-            function_args = json.loads(response_message['function_call']['arguments'])
+            function_args = yaml.loads(response_message['function_call']['arguments'])
             if function_name in ['get_stock_price','calculate_RSI','calculate_MACD','plot_stock_price']:
                 args_dict = {'ticker': function_args.get('ticker')}
             elif function_name in ['calculate_SMA','calculate_EMA']:
@@ -209,7 +212,7 @@ if user_input:
             st.text(response_message['content'])
             st.session_state['messages'].append({'role': 'assistant', 'content': response_message['content']})
     except Exception as e:
-        st.text('Error occured, ', str(e))
+        st.text('Error occured, '+ str(e))
 
 #python -m streamlit run main.py
 
