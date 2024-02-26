@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import yfinance as yf
 import os  
+from dotenv import load_dotenv
+load_dotenv('.env.gitignore')
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
@@ -166,12 +168,7 @@ user_input = st.text_input('Your Input:')
 if user_input:
     try:
         st.session_state['messages'].append({'role': 'user', 'content':f'{user_input}'})
-        # response = openai.Completion.create(
-        # engine="text-davinci-002",
-        # prompt=input(""),
-        # max_tokens=100
-        # )
-        response = openai.ChatCompletion.create(
+        response = openai.Completion.create(
             model='gpt-3.5-turbo-0613',
             messages=st.session_state['messages'],
             functions=functions,
@@ -202,7 +199,7 @@ if user_input:
                         'content': function_response
                     }
                 )
-                second_response = openai.ChatCompletion.create(
+                second_response = openai.Completion.create(
                     model='gpt-3.5-turbo-0613',
                     messages=st.session_state['messages']
                 )
